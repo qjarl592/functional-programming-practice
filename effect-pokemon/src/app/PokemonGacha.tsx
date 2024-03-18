@@ -51,15 +51,15 @@ export default function PokemonGacha({}: Props) {
   );
 
   return (
-    <div className="flex flex-col w-screen">
+    <div className="flex flex-col w-screen h-screen">
       <span className="text-6xl font-bold text-center mt-10 mb-3">
         Try Random Pokemon Gacha Machine
       </span>
-      <div className="flex">
+      <div className="flex h-full">
         <div className="w-1/2 items-center border border-2 flex flex-col">
-          <img src="/gachaMachine.jpeg" />
+          <img className="w-auto h-[80%]" src="/gachaMachine.jpeg" />
           <button
-            className="w-full pt-3 pb-3 border border-2 text-2xl hover:bg-gray-300"
+            className="w-1/2 py-3 border border-2 rounded-lg text-2xl hover:bg-gray-300"
             onClick={runGacha}
           >
             Gacha!!
@@ -67,11 +67,11 @@ export default function PokemonGacha({}: Props) {
         </div>
         <div className="w-1/2 flex flex-col items-center justify-center border border-2">
           {myPokemon ? (
-            <div className="flex flex-col w-full items-center">
-              <img className="w-[60%]" src={myPokemon.pictureUrl} />
+            <div className="flex flex-col items-center w-full">
               <span className="w-full text-4xl text-center">
-                name : {myPokemon.name}
+                Congratulation!! <br /> You get a {myPokemon.name}.
               </span>
+              <img className="w-[60%]" src={myPokemon.pictureUrl} />
             </div>
           ) : (
             <img className="w-1/2" src="/Pokeball.webp" />
