@@ -42,7 +42,13 @@ export default function PokemonGacha({}: Props) {
   );
 
   const runGacha = useCallback(
-    () => Effect.runPromise(program).then(setMyPokemon),
+    () =>
+      Effect.runPromise(program)
+        .then(setMyPokemon)
+        .catch((e) => {
+          console.log(e);
+          setMyPokemon(Option.none());
+        }),
     [program]
   );
 
