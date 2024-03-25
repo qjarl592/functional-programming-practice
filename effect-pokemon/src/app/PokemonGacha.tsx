@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import { Effect, pipe } from "effect";
+import { Effect, pipe, Option } from "effect";
 
 type Props = {};
 
@@ -10,13 +10,9 @@ type Pokemon = {
 };
 
 export default function PokemonGacha({}: Props) {
-  const [myPokemon, setMyPokemon] = useState<Pokemon | null>(null);
-
-  useEffect(() => {
-    if (myPokemon) {
-      console.log("myPokemon is ", myPokemon);
-    }
-  }, [myPokemon]);
+  const [myPokemon, setMyPokemon] = useState<Option.Option<Pokemon>>(
+    Option.none()
+  );
 
   const getRandomNumber = Effect.sync(() => Math.floor(Math.random() * 100));
 
@@ -33,10 +29,10 @@ export default function PokemonGacha({}: Props) {
   const parsePokemon = (data: any) => {
     const name = data.name;
     const pictureUrl = data.sprites.front_default;
-    const pokemon: Pokemon = {
+    const pokemon: Option.Option<Pokemon> = Option.some({
       name: name,
       pictureUrl: pictureUrl,
-    };
+    });
     return pokemon;
   };
 
@@ -66,16 +62,17 @@ export default function PokemonGacha({}: Props) {
           </button>
         </div>
         <div className="w-1/2 flex flex-col items-center justify-center border border-2">
-          {myPokemon ? (
-            <div className="flex flex-col items-center w-full">
-              <span className="w-full text-4xl text-center">
-                Congratulation!! <br /> You get a {myPokemon.name}.
-              </span>
-              <img className="w-[60%]" src={myPokemon.pictureUrl} />
-            </div>
-          ) : (
-            <img className="w-1/2" src="/Pokeball.webp" />
-          )}
+          {Option.match(myPokemon, {
+            onNone: () => <img className="w-1/2" src="/Pokeball.webp" />,
+            onSome: (pokemon) => (
+              <div className="flex flex-col items-center w-full">
+                <span className="w-full text-4xl text-center">
+                  Congratulation!! <br /> You get a {pokemon.name}.
+                </span>
+                <img className="w-[60%]" src={pokemon.pictureUrl} />
+              </div>
+            ),
+          })}
         </div>
       </div>
     </div>
